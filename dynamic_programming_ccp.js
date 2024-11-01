@@ -3,16 +3,34 @@
 
 let dpCoinChange = (amount, coins) => {
     let table2d = [];
-    for (let i=0; i < coins.length; i++) {
+    for (let i=0; i <= coins.length; i++) {
         let row = [];
         for (let j=0; j <= amount; j++) {
-            row.push(j);
+            row.push(undefined);
         }
         table2d.push(row);
     }
-    return table2d
+    for (i=0; i < coins.length; i++) {
+        table2d[i][0] = 0;
+        }
+    for (let j=0; j<=amount; j++) {
+        table2d[0][j] = j;
+        }
+    
+    for (i=1; i<=coins.length; i++) {
+        for (let j=0; j<=amount; j++) {
+            if ((j - coins[i-1]) >= 0) {
+                //console.log(`j:${j}, coin:${coins[i]}, difference: ${j-coins[i]}`);
+                table2d[i][j] = Math.min(table2d[i-1][j],table2d[i][j-coins[i-1]]+1);
+            } else {
+                table2d[i][j] = table2d[i-1][j];
+            }
+        }
+    }
+    
+    return console.log(`fewest amount of coins: ${table2d[coins.length][amount]}`)
 }
-let coins = [1,2,3]
-let amount = 15
+let coins = [1,2,3,8]
+let amount = 21
 let myTest = dpCoinChange(amount, coins)
 console.log(myTest)
